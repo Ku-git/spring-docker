@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  spring-app:
+    image: spring-app:1.3
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"
+      - "JAVA_OPTS=-Xms512m -Xmx1024m"
+    networks:
+      backend:
+        aliases:
+          - "spring-app"
+networks:
+  backend:
+    driver: bridge
