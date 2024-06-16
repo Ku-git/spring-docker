@@ -1,11 +1,11 @@
-spring:
-  application:
-    name: spring-app #應用程式的名稱，為service discovery所命名
-  profiles:
-    active: dev
-  cloud:
-    config:
-      uri: http://configserver:8071
+#spring:
+#  application:
+#    name: spring-app #應用程式的名稱，為service discovery所命名
+#  profiles:
+#    active: dev
+#  cloud:
+#    config:
+#      uri: http://localhost:8071
 #      server:
 #        native:
 #          search-locations: resources/config/
@@ -14,4 +14,12 @@ spring:
           #searchPaths: springDocker
           # classpath屬性使得spring cloud config可以在src/main/resources/config文件中查詢設定
           # or 使用File:///Users/userName/config中查詢設定
+#spring:
+#  application:
+#    name: spring-app # 应用名称
+#  config:
+#    import: optional:configserver:http://localhost:8071 # 配置服务器 URL
+#  profiles:
+#    active: dev,mysql # 激活的环境
+
 
