@@ -2,7 +2,6 @@ package com.licence;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 
 @SpringBootApplication
-//@EnableConfigServer //使這個服務成為spring cloud config的服務
+//@RefreshScope
 public class SpringBootDockerApplication {
 
     public static void main(String[] args) {
