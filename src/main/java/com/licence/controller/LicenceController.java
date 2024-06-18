@@ -1,43 +1,51 @@
 package com.licence.controller;
 
-import com.licence.model.Licence;
-import com.licence.service.LicenceService;
+import com.licence.model.License;
+import com.licence.service.LicenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("v1/organization/{organizationId}/licence")
+@RequestMapping("v1/organization/{organizationId}/license")
 public class LicenceController {
 
-    private final LicenceService licenceService;
+    private final LicenseService licenseService;
 
-    public LicenceController(LicenceService licenceService) {
-        this.licenceService = licenceService;
+    public LicenceController(LicenseService licenseService) {
+        this.licenseService = licenseService;
     }
 
     @GetMapping("/{licenceId}")
-    public ResponseEntity<Licence> getLicence(@PathVariable("organizationId") String organizationId,
+    public ResponseEntity<License> getLicence(@PathVariable("organizationId") String organizationId,
                                               @PathVariable("licenceId") String licenceId) {
 
-        Licence licence = licenceService.getLicence(licenceId, organizationId);
-        return ResponseEntity.ok(licence);
+        License license = licenseService.getLicence(licenceId, organizationId);
+        return ResponseEntity.ok(license);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<License>> findAll(@PathVariable("organizationId") String organizationId) {
+
+        List<License> licenses = licenseService.findAll();
+        return ResponseEntity.ok(licenses);
     }
 
     @PostMapping
-    public ResponseEntity<String> addLicence(@PathVariable("organizationId") String organizationId,
-         @RequestBody Licence licence, @RequestHeader(value = "Accept-Language",required = false) Locale locale) {
+    public ResponseEntity<License> addLicence(@PathVariable("organizationId") String organizationId,
+                                              @RequestBody License license, @RequestHeader(value = "Accept-Language",required = false) Locale locale) {
 
-        String result = licenceService.addLicence(licence, organizationId, locale);
+        License result = licenseService.addLicence(license, organizationId, locale);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping
-    public ResponseEntity<String> updateLicence(@PathVariable("organizationId") String organizationId,
-                                                @RequestBody Licence licence) {
+    public ResponseEntity<License> updateLicence(@PathVariable("organizationId") String organizationId,
+                                                 @RequestBody License license) {
 
-        String result = licenceService.updateLicence(licence, organizationId);
+        License result = licenseService.updateLicence(license, organizationId);
         return ResponseEntity.ok(result);
     }
 
@@ -45,7 +53,7 @@ public class LicenceController {
     public ResponseEntity<String> deleteLicence(@PathVariable("organizationId") String organizationId,
                                                 @PathVariable("licenceId") String licenceId) {
 
-        String result = licenceService.deleteLicence(licenceId, organizationId);
+        String result = licenseService.deleteLicence(licenceId);
         return ResponseEntity.ok(result);
     }
 
