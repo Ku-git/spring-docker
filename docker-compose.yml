@@ -1,16 +1,54 @@
 version: "3.8"
 
 services:
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_USER: root
+#      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ms
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#    networks:
+#      backend:
+#        aliases:
+#          - "database"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+      start_period: 30s
+    volumes:
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+  config-server:
+    image: config-server:latest
+    ports:
+      - "8071:8071"
+#    networks:
+#      backend:
+#        aliases:
+#          - "config-server"
   spring-app:
-    image: spring-app:1.3
+    image: spring-app:latest
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      - "JAVA_OPTS=-Xms512m -Xmx1024m"
-    networks:
-      backend:
-        aliases:
-          - "spring-app"
+      PROFILE: "dev"
+      CONFIG_SERVER_URI: "http://config-server"
+      CONFIG_SERVER_PORT: "8071"
+#    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 确保环境变量与配置一致
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
+#    networks:
+#      backend:
+#        aliases:
+#          - "spring-app"
 networks:
   backend:
     driver: bridge
