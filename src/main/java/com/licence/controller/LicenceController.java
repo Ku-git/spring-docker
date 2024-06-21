@@ -1,6 +1,7 @@
 package com.licence.controller;
 
 import com.licence.model.License;
+import com.licence.model.Organization;
 import com.licence.service.LicenseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,20 @@ public class LicenceController {
         this.licenseService = licenseService;
     }
 
-    @GetMapping("/{licenceId}")
+    @GetMapping("/{licenseId}")
     public ResponseEntity<License> getLicence(@PathVariable("organizationId") String organizationId,
-                                              @PathVariable("licenceId") String licenceId) {
+                                              @PathVariable("licenseId") String licenseId) {
 
-        License license = licenseService.getLicence(licenceId, organizationId);
+        License license = licenseService.getLicence(licenseId, organizationId);
+        return ResponseEntity.ok(license);
+    }
+    
+    @GetMapping("/{licenseId}/{clientType}")
+    public ResponseEntity<License> getLicenseWithClient(@PathVariable("organizationId") String organizationId,
+                                                        @PathVariable("licenseId") String licenseId,
+                                                        @PathVariable("clientType") String clientType) {
+
+        License license = licenseService.getLicense(licenseId, organizationId, clientType);
         return ResponseEntity.ok(license);
     }
 
@@ -49,11 +59,11 @@ public class LicenceController {
         return ResponseEntity.ok(result);
     }
 
-    @DeleteMapping("{licenceId}")
+    @DeleteMapping("{licenseId}")
     public ResponseEntity<String> deleteLicence(@PathVariable("organizationId") String organizationId,
-                                                @PathVariable("licenceId") String licenceId) {
+                                                @PathVariable("licenseId") String licenseId) {
 
-        String result = licenseService.deleteLicence(licenceId);
+        String result = licenseService.deleteLicence(licenseId);
         return ResponseEntity.ok(result);
     }
 
