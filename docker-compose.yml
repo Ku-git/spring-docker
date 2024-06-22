@@ -30,6 +30,15 @@ services:
 #      backend:
 #        aliases:
 #          - "config-server"
+  eureka-server:
+    image: eureka-server:latest
+    ports:
+      - "8070:8070"
+    depends_on:
+      db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
   spring-app:
     image: spring-app:latest
     ports:
@@ -37,18 +46,36 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      config-server:
+        condition: service_started
     environment:
       PROFILE: "dev"
       CONFIG_SERVER_URI: "http://config-server"
       CONFIG_SERVER_PORT: "8071"
 #    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 确保环境变量与配置一致
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 確保環境變數與配置一致
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
 #    networks:
 #      backend:
 #        aliases:
 #          - "spring-app"
+  organization-server:
+    image: organization-server:latest
+    ports:
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+    environment:
+      PROFILE: "dev"
+      CONFIG_SERVER_URI: "http://config-server"
+      CONFIG_SERVER_PORT: "8071"
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 確保環境變數與配置一致
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD:
 networks:
   backend:
     driver: bridge
