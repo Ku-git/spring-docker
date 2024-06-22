@@ -1,6 +1,6 @@
-#spring:
-#  application:
-#    name: spring-app #應用程式的名稱，為service discovery所命名
+spring:
+  application:
+    name: spring-app #應用程式的名稱，為service discovery所命名
 #  profiles:
 #    active: dev
 #  cloud:

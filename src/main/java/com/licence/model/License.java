@@ -22,6 +22,14 @@ public class License {
     private String licenseType;
     @Transient
     private String comment;
+    @Transient
+    private String organizationName;
+    @Transient
+    private String contactName;
+    @Transient
+    private String contactEmail;
+    @Transient
+    private String contactPhone;
 
     public License withComment(String comment) {
         this.comment = comment;
