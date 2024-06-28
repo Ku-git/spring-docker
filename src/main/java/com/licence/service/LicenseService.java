@@ -123,6 +123,12 @@ public class LicenseService {
         return responseMessage;
     }
 
+    /**
+     *  bulk head: 處理併發數量
+     *  rate limit: 限定秒數內的呼叫數量
+     *  retry: 失敗後重複呼叫次數
+     *  circuit breaker: 多次錯誤發生，若錯誤比例超過設定閥值就會阻止後續的呼叫，且執行後備方案
+     */
     @CircuitBreaker(name = "licenseService", fallbackMethod = "buildFallBackList")
     @RateLimiter(name = "limitLicense", fallbackMethod = "buildRateFallBackList")
     @Retry(name = "retryLicense", fallbackMethod = "buildRetryFallBackList")
