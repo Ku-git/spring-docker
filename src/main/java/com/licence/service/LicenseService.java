@@ -91,6 +91,7 @@ public class LicenseService {
                 result = discoveryClient.getOrganization(organizationId);
             }
             case "rest" -> {
+                //目前只有rest會傳送correlation id
                 System.out.println("using load balance rest template");
                 result = restClient.getOrganization(organizationId);
             }
