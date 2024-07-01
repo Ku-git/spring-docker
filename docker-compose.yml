@@ -39,6 +39,17 @@ services:
         condition: service_healthy
       config-server:
         condition: service_started
+  gateway-server:
+    image: gateway-server:latest
+    ports:
+      - "8072:8072"
+    depends_on:
+      db:
+        condition: service_healthy
+      config-server:
+        condition: service_started
+      eureka-server:
+        condition: service_started
   spring-app:
     image: spring-app:latest
     ports:
