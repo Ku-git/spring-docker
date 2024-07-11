@@ -87,6 +87,14 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 確保環境變數與配置一致
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.1
+    restart: always
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - "8180:8080"
 networks:
   backend:
     driver: bridge
