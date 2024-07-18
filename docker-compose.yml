@@ -22,6 +22,8 @@ services:
       start_period: 30s
     volumes:
       - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+    networks:
+      - demo-network
   config-server:
     image: config-server:latest
     ports:
@@ -30,6 +32,8 @@ services:
 #      backend:
 #        aliases:
 #          - "config-server"
+    networks:
+      - demo-network
   eureka-server:
     image: eureka-server:latest
     ports:
@@ -39,6 +43,8 @@ services:
         condition: service_healthy
       config-server:
         condition: service_started
+    networks:
+      - demo-network
   gateway-server:
     image: gateway-server:latest
     ports:
@@ -50,6 +56,8 @@ services:
         condition: service_started
       eureka-server:
         condition: service_started
+    networks:
+      - demo-network
   spring-app:
     image: spring-app:latest
     ports:
@@ -71,6 +79,8 @@ services:
 #      backend:
 #        aliases:
 #          - "spring-app"
+    networks:
+      - demo-network
   organization-server:
     image: organization-server:latest
     ports:
@@ -87,6 +97,32 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ms # 確保環境變數與配置一致
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
+    networks:
+      - demo-network
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.1
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_FRONTEND_URL: keycloak
+    volumes:
+      - ./src/main/resources/realm.json:/opt/keycloak/data/import/realm.json
+    command:
+      - "start-dev"
+      - "--import-realm"
+      - "--optimized"
+    ports:
+      - "8180:8080"
+    networks:
+      - demo-network
+
 networks:
-  backend:
+  demo-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: ${SUBNET:-172.16.0.0/24}
+#networks:
+#  backend:
+#    driver: bridge
