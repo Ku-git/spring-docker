@@ -1965,6 +1965,7 @@
     "oauth2DevicePollingInterval" : "5",
     "parRequestUriLifespan" : "60",
     "cibaInterval" : "5",
+    "frontendUrl": "http://keycloak:8080/",
     "realmReusableOtpCode" : "false"
   },
   "keycloakVersion" : "25.0.1",
