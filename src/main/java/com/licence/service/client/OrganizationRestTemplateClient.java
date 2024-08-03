@@ -1,5 +1,7 @@
 package com.licence.service.client;
 
+import brave.ScopedSpan;
+import brave.Tracer;
 import com.licence.model.Organization;
 import com.licence.repository.OrganizationRedisRepository;
 import com.licence.utils.UserContext;
@@ -24,9 +26,10 @@ public class OrganizationRestTemplateClient {
     @Autowired
     @Qualifier("RestTemplateLB")
     private RestTemplate restTemplate;
-
     @Autowired
     private OrganizationRedisRepository orgRedisRepository;
+    @Autowired
+    private Tracer tracer;
 
 
     public Organization getOrganization(String organizationId) {
@@ -51,11 +54,16 @@ public class OrganizationRestTemplateClient {
     }
 
     private Organization checkRedisCache(String organizationId) {
+        ScopedSpan newSpan = tracer.startScopedSpan("read License Data From Redis");
         try {
             return orgRedisRepository.findById(organizationId).orElse(null);
         } catch (Exception e) {
             logger.error("error occurred while trying to retrieve organization {}, checking redis cache.", organizationId, e);
             return null;
+        } finally {
+            newSpan.tag("peer.service", "redis");
+            newSpan.annotate("Client received");
+            newSpan.finish();
         }
     }
 
