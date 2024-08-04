@@ -19,6 +19,7 @@ public class OrganizationEventListener {
     public void listen(ConsumerRecord<String, String> record) {
 
         logger.info("received message: {}", record);
+
         ObjectMapper objectMapper = new ObjectMapper();
         OrganizationChangeModel organization = null;
         try {

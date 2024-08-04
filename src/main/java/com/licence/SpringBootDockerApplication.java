@@ -43,15 +43,4 @@ public class SpringBootDockerApplication {
         return messageSource;
     }
 
-    @LoadBalanced
-    @Bean(name = "RestTemplateLB")
-    public RestTemplate getLoadBalanceRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
-        interceptors.add(new UserContextInterceptor());
-        restTemplate.setInterceptors(interceptors);
-
-        return restTemplate;
-    }
 }
